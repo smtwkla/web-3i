@@ -8,6 +8,7 @@ flask = "*"
 flask-sqlalchemy = "*"
 pymysql = "*"
 flask-moment = "*"
+flask-bootstrap = "*"
 
 [dev-packages]
 

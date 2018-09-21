@@ -1,11 +1,15 @@
-from flask import Flask
+from flask import Flask, render_template
+from flask import request
 from flask_sqlalchemy import SQLAlchemy
+from flask_bootstrap import Bootstrap
 
 app = Flask(__name__)
+
 app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+pymysql://web:iot_Data_2018@db.iot.mspvtiles.com/iotdata"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
+bs = Bootstrap(app)
 
 class Channel_Data(db.Model):
         __tablename__ = "channel_data"
@@ -19,7 +23,7 @@ def hello_world():
     data = Channel_Data.query.filter_by(channel_id=2).order_by(Channel_Data.ts.desc()).first()
     amps = data.value
     ts = data.ts.isoformat()
-    return f'<html><head><meta http-equiv="refresh" content="3"></head>?<body><h1>Paddle Amps:{amps}</h1>Timestamp: {ts}<script  language="javascript" type="text/javascript" setTimeout(function() {{ window.location=window.location;}},5000);</script></body></html>'
+    return render_template('base.html', amps = amps, ts = ts)
 
 
 if __name__ == '__main__':

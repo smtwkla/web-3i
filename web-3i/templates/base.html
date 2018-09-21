@@ -1,0 +1,16 @@
+{% extends "bootstrap/base.html" %}
+{%  block metas %}
+<meta http-equiv="refresh" content="3">
+{% endblock %}
+{% block title %}This is an example page{% endblock %}
+
+{% block navbar %}
+<div class="navbar navbar-fixed-top">
+  <!-- ... -->
+</div>
+{% endblock %}
+
+{% block content %}
+  <h1>Paddle 2 Amps: {{amps/10}}</h1>
+      Timestamp: {{ts}}
+{% endblock %}
