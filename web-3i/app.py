@@ -19,7 +19,7 @@ def hello_world():
     data = Channel_Data.query.filter_by(channel_id=2).order_by(Channel_Data.ts.desc()).first()
     amps = data.value
     ts = data.ts.isoformat()
-    return f'<h1>Paddle Amps:{amps}</h1>Timestamp: {ts}'
+    return f'<html><body><h1>Paddle Amps:{amps}</h1>Timestamp: {ts}<script setTimeout(function() { window.location=window.location;},5000);</script></body></html>'
 
 
 if __name__ == '__main__':
