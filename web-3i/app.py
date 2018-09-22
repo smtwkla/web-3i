@@ -24,10 +24,12 @@ class Channel_Data(db.Model):
 
 @app.route('/')
 def hello_world():
-    data = Channel_Data.query.filter_by(channel_id=2).order_by(Channel_Data.ts.desc()).first()
-    amps = data.value
-    ts = data.ts.isoformat()
-    return render_template('base.html', amps = amps, ts = ts)
+    paddle2ams = Channel_Data.query.filter_by(channel_id=2).order_by(Channel_Data.ts.desc()).first()
+    paddle2rpm = Channel_Data.query.filter_by(channel_id=6).order_by(Channel_Data.ts.desc()).first()
+    amps = paddle2ams.value
+    rpm = paddle2rpm.value
+    ts = paddle2ams.ts.isoformat()
+    return render_template('base.html', amps=amps, rpm=rpm, ts=ts)
 
 # @app.route('/plot.png')
 # def plot():
