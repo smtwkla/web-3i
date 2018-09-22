@@ -1,7 +1,11 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, make_response
 from flask import request
 from flask_sqlalchemy import SQLAlchemy
 from flask_bootstrap import Bootstrap
+
+import io
+from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
+from matplotlib.figure import Figure
 
 app = Flask(__name__)
 
@@ -25,6 +29,21 @@ def hello_world():
     ts = data.ts.isoformat()
     return render_template('base.html', amps = amps, ts = ts)
 
+@app.route('/plot.png')
+def plot():
+    fig = Figure()
+    axis = fig.add_subplot(1, 1, 1)
+
+    xs = range(100)
+    ys = range(100)
+
+    axis.plot(xs, ys)
+    canvas = FigureCanvas(fig)
+    output = io.StringIO()
+    canvas.print_png(output)
+    response = make_response(output.getvalue())
+    response.mimetype = 'image/png'
+    return response
 
 if __name__ == '__main__':
     app.run()

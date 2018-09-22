@@ -9,6 +9,8 @@ flask-sqlalchemy = "*"
 pymysql = "*"
 flask-moment = "*"
 flask-bootstrap = "*"
+numpy = "*"
+matplotlib = "*"
 
 [dev-packages]
 
