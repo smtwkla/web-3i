@@ -11,7 +11,7 @@
 {% endblock %}
 
 {% block content %}
-  <h1>Paddle 2 Amps: {{amps | round }}</h1>
+  <h1>Paddle 2 Amps: {{amps | round(1, common) }}</h1>
   <h1>Paddle 2 RPM: {{rpm | int }}</h1>
       Timestamp: {{ts}}
 {% endblock %}
