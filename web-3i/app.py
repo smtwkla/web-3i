@@ -2,6 +2,7 @@ from flask import Flask, render_template, make_response
 from flask import request
 from flask_sqlalchemy import SQLAlchemy
 from flask_bootstrap import Bootstrap
+import configparser
 
 #import io
 #from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
@@ -9,7 +10,10 @@ from flask_bootstrap import Bootstrap
 
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+pymysql://web:iot_Data_2018@db.iot.mspvtiles.com/iotdata"
+config = configparser.ConfigParser()
+config.read('config.ini')
+
+app.config['SQLALCHEMY_DATABASE_URI'] = config['db']['db_uri']
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
