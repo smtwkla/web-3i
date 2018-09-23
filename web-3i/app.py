@@ -38,12 +38,17 @@ class Channel_Data(db.Model):
 def hello_world():
     paddle2ams = Channel_Data.query.filter_by(channel_id=2).order_by(Channel_Data.ts.desc()).first()
     paddle2rpm = Channel_Data.query.filter_by(channel_id=6).order_by(Channel_Data.ts.desc()).first()
+    paddle2temp = Channel_Data.query.filter_by(channel_id=7).order_by(Channel_Data.ts.desc()).first()
+
     amps = paddle2ams.value
     rpm = paddle2rpm.value
+    drivetemp = paddle2temp.value
     ts = paddle2ams.ts
     ts_rpm = paddle2rpm.ts
+    ts_drivetemp = paddle2temp.ts
     now = datetime.datetime.utcnow()
-    return render_template('base.html', amps=amps, rpm=rpm, ts=ts, ts_rpm=ts_rpm, now=now)
+    return render_template('base.html', amps=amps, rpm=rpm, ts=ts, ts_rpm=ts_rpm, now=now, drivetemp=drivetemp,
+                           ts_drivetemp=ts_drivetemp)
 
 # @app.route('/plot.png')
 # def plot():

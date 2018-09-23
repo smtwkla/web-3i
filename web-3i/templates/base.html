@@ -1,6 +1,6 @@
 {% extends "bootstrap/base.html" %}
 {% block metas %}
-<meta http-equiv="refresh" content="30">
+<meta http-equiv="refresh" content="3">
 {% endblock %}
 {% block title %}This is an example page{% endblock %}
 
@@ -14,6 +14,8 @@
 
   <h1>Paddle 2 Amps: {{amps | round(1, 'common') }}</h1> <b>{{ moment(ts).fromTime(now) }}</b>
   <h1>Paddle 2 RPM: {{rpm | int }}</h1><b>{{ moment(ts_rpm).fromTime(now) }}</b>
+  <h1>Paddle 2 Drive Temp: {{ drivetemp | round(1, 'common')}}</h1> <b>{{ moment(ts_drivetemp).fromTime(now) }}</b>
+
     <P></P>
   <p>Timestamp: {{ moment(now).format('MMMM Do YYYY, h:mm:ss a') }} </p>
 {% endblock %}
