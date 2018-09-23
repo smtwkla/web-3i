@@ -2,7 +2,9 @@ from flask import Flask, render_template, make_response
 from flask import request
 from flask_sqlalchemy import SQLAlchemy
 from flask_bootstrap import Bootstrap
+from flask_moment import Moment
 import configparser
+import datetime
 
 #import io
 #from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
@@ -11,13 +13,19 @@ import configparser
 app = Flask(__name__)
 
 config = configparser.ConfigParser()
-config.read('config.ini')
+config.read('web-3i/config.ini')
 
-app.config['SQLALCHEMY_DATABASE_URI'] = config['db']['db_uri']
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+try:
+    app.config['SQLALCHEMY_DATABASE_URI'] = config['db']['db_uri']
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+except KeyError:
+    print("Unable to read config.ini.")
+    exit(1)
 
 db = SQLAlchemy(app)
 bs = Bootstrap(app)
+moment = Moment(app)
 
 class Channel_Data(db.Model):
         __tablename__ = "channel_data"
@@ -32,8 +40,10 @@ def hello_world():
     paddle2rpm = Channel_Data.query.filter_by(channel_id=6).order_by(Channel_Data.ts.desc()).first()
     amps = paddle2ams.value
     rpm = paddle2rpm.value
-    ts = paddle2ams.ts.isoformat()
-    return render_template('base.html', amps=amps, rpm=rpm, ts=ts)
+    ts = paddle2ams.ts
+    ts_rpm = paddle2rpm.ts
+    now = datetime.datetime.utcnow()
+    return render_template('base.html', amps=amps, rpm=rpm, ts=ts, ts_rpm=ts_rpm, now=now)
 
 # @app.route('/plot.png')
 # def plot():
