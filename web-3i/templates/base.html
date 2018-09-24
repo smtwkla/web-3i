@@ -103,7 +103,7 @@
 
               data.addRows([
                   {%  for ch in table %}
-                      [new Date("{{ ch.time_millis() }}"), {{ ch.value  }}, {{ ch.value }} ],
+                      [new Date("{{ ch.time_millis() }}"), {{ ch.value  }}, {{ ch.value }} ], // {{ ch.time }}
                   {% endfor %}
       ]);
 

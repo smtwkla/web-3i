@@ -4,7 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_bootstrap import Bootstrap
 from flask_moment import Moment
 import configparser
-import datetime, time
+import datetime
 import logging
 from sqlalchemy import Date as dbDate, cast
 
@@ -30,6 +30,11 @@ bs = Bootstrap(app)
 moment = Moment(app)
 
 
+class TZ_IN(datetime.tzinfo):
+    def utcoffset(self, dt):
+        return datetime.timedelta(minutes=330)
+
+
 class Channel_Data(db.Model):
     __tablename__ = "channel_data"
     id = db.Column(db.Integer, primary_key=True)
@@ -38,7 +43,9 @@ class Channel_Data(db.Model):
     value = db.Column(db.Numeric(25, 6))
     channel = db.relationship("Channels")
     def time_millis(self):
-        return self.ts.isoformat()
+        tz = TZ_IN()
+        dt = self.ts.replace(tzinfo=tz)
+        return dt.isoformat()
 
 class Channels(db.Model):
     __tablename__ = 'channels'
