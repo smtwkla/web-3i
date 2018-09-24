@@ -80,7 +80,7 @@ def export_all_channels():
 def export_chl_history(chl_id):
 
 
-    ch = Channel_Data.query.filter_by(channel_id=chl_id).order_by(Channel_Data.ts.desc()).limit(100).all()
+    ch = Channel_Data.query.filter_by(channel_id=chl_id).order_by(Channel_Data.ts.desc()).limit(4320).all()
     return ch
 
 @app.route('/')
