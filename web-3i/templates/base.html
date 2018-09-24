@@ -96,14 +96,14 @@
                         },
                         vAxis: {
                           viewWindow: {
-                            max: 30
+
                           }
                         }
         };
 
               data.addRows([
                   {%  for ch in table %}
-                      [new Date("{{ ch.ts }}"), {{ ch.value  }}, {{ ch.value }} ],
+                      [new Date("{{ ch.time_millis() }}"), {{ ch.value  }}, {{ ch.value }} ],
                   {% endfor %}
       ]);
 

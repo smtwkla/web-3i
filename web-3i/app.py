@@ -4,8 +4,9 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_bootstrap import Bootstrap
 from flask_moment import Moment
 import configparser
-import datetime
+import datetime, time
 import logging
+from sqlalchemy import Date as dbDate, cast
 
 #import io
 #from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
@@ -36,6 +37,8 @@ class Channel_Data(db.Model):
     ts = db.Column(db.DateTime, nullable=False)
     value = db.Column(db.Numeric(25, 6))
     channel = db.relationship("Channels")
+    def time_millis(self):
+        return self.ts.isoformat()
 
 class Channels(db.Model):
     __tablename__ = 'channels'
@@ -78,10 +81,10 @@ def export_all_channels():
     return cd
 
 def export_chl_history(chl_id):
-
-
-    ch = Channel_Data.query.filter_by(channel_id=chl_id).order_by(Channel_Data.ts.desc()).limit(4320).all()
+    today = datetime.date(2018, 9, 24) # datetime.date.today()
+    ch = Channel_Data.query.filter_by(channel_id=chl_id).filter(cast(Channel_Data.ts, dbDate) == today).order_by(Channel_Data.ts.desc()).limit(5000).all()
     return ch
+
 
 @app.route('/')
 def hello_world():
