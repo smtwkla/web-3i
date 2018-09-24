@@ -63,7 +63,7 @@ class Buses(db.Model):
     enabled = db.Column(db.Boolean, nullable=False)
 
 
-def export_channels():
+def export_all_channels():
     cd = {}
 
     #List of all Enabled Channels:
@@ -77,11 +77,16 @@ def export_channels():
 
     return cd
 
+def export_chl_history(chl_id):
+
+
+    ch = Channel_Data.query.filter_by(channel_id=chl_id).order_by(Channel_Data.ts.desc()).limit(100).all()
+    return ch
 
 @app.route('/')
 def hello_world():
 
-    cd = export_channels()
+    cd = export_all_channels()
 
 
     amps = cd['Paddle2Current'].value
@@ -91,9 +96,13 @@ def hello_world():
     ts_rpm = cd['Paddle2Speed'].ts
     ts_drivetemp = cd['Paddle2DriveTemp'].ts
 
+    table = export_chl_history(2)
+
     now = datetime.datetime.now()
     return render_template('base.html', amps=amps, rpm=rpm, ts=ts, ts_rpm=ts_rpm, now=now, drivetemp=drivetemp,
-                           ts_drivetemp=ts_drivetemp)
+                           ts_drivetemp=ts_drivetemp, table=table)
+
+
 
 # @app.route('/plot.png')
 # def plot():
