@@ -5,6 +5,7 @@ from flask_bootstrap import Bootstrap
 from flask_moment import Moment
 import configparser
 import datetime
+import logging
 
 #import io
 #from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
@@ -27,25 +28,68 @@ db = SQLAlchemy(app)
 bs = Bootstrap(app)
 moment = Moment(app)
 
+
 class Channel_Data(db.Model):
-        __tablename__ = "channel_data"
-        id = db.Column(db.Integer, primary_key=True)
-        channel_id = db.Column(db.Integer, db.ForeignKey('channels.id'), nullable=False)
-        ts = db.Column(db.DateTime, nullable=False)
-        value = db.Column(db.Numeric(25, 6))
+    __tablename__ = "channel_data"
+    id = db.Column(db.Integer, primary_key=True)
+    channel_id = db.Column(db.Integer, db.ForeignKey('channels.id'), nullable=False)
+    ts = db.Column(db.DateTime, nullable=False)
+    value = db.Column(db.Numeric(25, 6))
+    channel = db.relationship("Channels")
+
+class Channels(db.Model):
+    __tablename__ = 'channels'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), nullable=False)
+    bus_id = db.Column(db.Integer, db.ForeignKey('buses.id'), nullable=False, )
+    bus = db.relationship("Buses")
+    device_id = db.Column(db.Integer, nullable=False)
+    address = db.Column(db.Integer, nullable=False)
+    timing = db.Column(db.Integer, nullable=False)
+    conversion_id = db.Column(db.Integer, db.ForeignKey('conversions.id'), nullable=False)
+    func_code = db.Column(db.Integer, nullable=False)
+    format_code = db.Column(db.Integer, nullable=False)
+    enabled = db.Column(db.Boolean, nullable=False)
+    eng_unit = db.Column(db.String(15))
+
+class Buses(db.Model):
+    __tablename__ = 'buses'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), nullable=False)
+    protocol = db.Column(db.Integer, nullable=False)
+    address = db.Column(db.String(50))
+    port = db.Column(db.Integer)
+    timeout = db.Column(db.Integer, nullable=False)
+    enabled = db.Column(db.Boolean, nullable=False)
+
+
+def export_channels():
+    cd = {}
+
+    #List of all Enabled Channels:
+    ch = Channels.query.filter_by(enabled=True).all()
+
+    for chl in ch:
+        logging.debug(chl.name)
+        val = Channel_Data.query.filter_by(channel_id=chl.id).order_by(Channel_Data.ts.desc()).first()
+        logging.debug(val.value)
+        cd[chl.name] = val
+
+    return cd
+
 
 @app.route('/')
 def hello_world():
-    paddle2ams = Channel_Data.query.filter_by(channel_id=2).order_by(Channel_Data.ts.desc()).first()
-    paddle2rpm = Channel_Data.query.filter_by(channel_id=6).order_by(Channel_Data.ts.desc()).first()
-    paddle2temp = Channel_Data.query.filter_by(channel_id=7).order_by(Channel_Data.ts.desc()).first()
 
-    amps = paddle2ams.value
-    rpm = paddle2rpm.value
-    drivetemp = paddle2temp.value
-    ts = paddle2ams.ts
-    ts_rpm = paddle2rpm.ts
-    ts_drivetemp = paddle2temp.ts
+    cd = export_channels()
+
+    amps = cd['Paddle2Current'].value
+    rpm = cd['Paddle2Speed'].value
+    drivetemp = cd['Paddle2DriveTemp'].value
+    ts = cd['Paddle2Current'].ts
+    ts_rpm = cd['Paddle2Speed'].ts
+    ts_drivetemp = cd['Paddle2DriveTemp'].ts
+
     now = datetime.datetime.utcnow()
     return render_template('base.html', amps=amps, rpm=rpm, ts=ts, ts_rpm=ts_rpm, now=now, drivetemp=drivetemp,
                            ts_drivetemp=ts_drivetemp)
