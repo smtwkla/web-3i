@@ -91,7 +91,7 @@ def hello_world():
     ts_rpm = cd['Paddle2Speed'].ts
     ts_drivetemp = cd['Paddle2DriveTemp'].ts
 
-    now = datetime.datetime.utcnow()
+    now = datetime.datetime.now()
     return render_template('base.html', amps=amps, rpm=rpm, ts=ts, ts_rpm=ts_rpm, now=now, drivetemp=drivetemp,
                            ts_drivetemp=ts_drivetemp)
 
