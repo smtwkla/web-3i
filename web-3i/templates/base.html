@@ -1,6 +1,7 @@
 {% extends "bootstrap/base.html" %}
 {% block metas %}
-<meta http-equiv="refresh" content="30">
+    <meta http-equiv="refresh" content="3">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 {% endblock %}
 {% block title %}web-3i : Dashboard - SREE MURUGAN TILE WORKS{% endblock %}
 
@@ -11,18 +12,18 @@
 {% endblock %}
 
 {% block content %}
-          <div class="page-header">
+          <div class="page-header container-fluid">
                <div class="row">
                    <div class="col-sm-2">
                         [ Status ]
                    </div>
-                   <div class="col-sm-8">
+                   <div class="col-sm-9">
                         <div class="panel panel-primary">
                             <div class="panel-heading">
                                 <h3 class="panel-title">Paddle 2 RPM</h3>
                             </div>
                             <div class="panel-body">
-                                <b>{{rpm | int }} </b> <br>
+                                <h1>{{rpm | int }} </h1> <br>
                                 {{ moment(ts_rpm).fromTime(now) }}
                             </div>
                         </div>
@@ -31,7 +32,7 @@
                                 <h3 class="panel-title">Paddle 2 Amps</h3>
                             </div>
                             <div class="panel-body">
-                                <b>{{amps | round(1, 'common') }}</b>
+                                <h1>{{amps | round(1, 'common') }}</h1>
                                 <br/>{{ moment(ts).fromTime(now) }}
                             </div>
                         </div>
@@ -40,12 +41,12 @@
                                 <h3 class="panel-title">Paddle 2 Drive Temp</h3>
                             </div>
                             <div class="panel-body">
-                                 <b>{{ drivetemp | round(1, 'common')}} </b><br/>
+                                 <h1>{{ drivetemp | round(1, 'common')}} </h1><br/>
                                   {{ moment(ts_drivetemp).fromTime(now) }}
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-2">
+                    <div class="col-sm-1">
                     </div>
                </div>
           </div>
