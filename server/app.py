@@ -15,7 +15,7 @@ from sqlalchemy import Date as dbDate, cast
 app = Flask(__name__)
 
 config = configparser.ConfigParser()
-config.read('web-3i/config.ini')
+config.read('server/config.ini')
 
 try:
     app.config['SQLALCHEMY_DATABASE_URI'] = config['db']['db_uri']
