@@ -88,7 +88,7 @@ def export_all_channels():
     return cd
 
 def export_chl_history(chl_id):
-    today = datetime.date(2018, 9, 24) # datetime.date.today()
+    today = datetime.date.today() # datetime.date(2018, 9, 24)
     ch = Channel_Data.query.filter_by(channel_id=chl_id).filter(cast(Channel_Data.ts, dbDate) == today).order_by(Channel_Data.ts.desc()).limit(5000).all()
     return ch
 
