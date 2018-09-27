@@ -89,7 +89,8 @@ def export_all_channels():
 
 def export_chl_history(chl_id):
     today = datetime.date.today() # datetime.date(2018, 9, 24)
-    ch = Channel_Data.query.filter_by(channel_id=chl_id).filter(cast(Channel_Data.ts, dbDate) == today).order_by(Channel_Data.ts.desc()).limit(5000).all()
+    ch = Channel_Data.query.filter_by(channel_id=chl_id).filter(cast(Channel_Data.ts, dbDate) == today).\
+        order_by(Channel_Data.ts.desc()).limit(5000).all()
     return ch
 
 
@@ -113,6 +114,24 @@ def hello_world():
                            ts_drivetemp=ts_drivetemp, table=table)
 
 
+@app.route('/c2')
+def chart():
+
+    cd = export_all_channels()
+
+
+    amps = cd['Paddle2Current'].value
+    rpm = cd['Paddle2Speed'].value
+    drivetemp = cd['Paddle2DriveTemp'].value
+    ts = cd['Paddle2Current'].ts
+    ts_rpm = cd['Paddle2Speed'].ts
+    ts_drivetemp = cd['Paddle2DriveTemp'].ts
+
+    table = export_chl_history(8)
+
+    now = datetime.datetime.utcnow()
+    return render_template('chart.html', amps=amps, rpm=rpm, ts=ts, ts_rpm=ts_rpm, now=now, drivetemp=drivetemp,
+                           ts_drivetemp=ts_drivetemp, table=table)
 
 # @app.route('/plot.png')
 # def plot():
