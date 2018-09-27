@@ -108,7 +108,7 @@ def hello_world():
 
     table = export_chl_history(2)
 
-    now = datetime.datetime.now()
+    now = datetime.datetime.utcnow()
     return render_template('base.html', amps=amps, rpm=rpm, ts=ts, ts_rpm=ts_rpm, now=now, drivetemp=drivetemp,
                            ts_drivetemp=ts_drivetemp, table=table)
 
