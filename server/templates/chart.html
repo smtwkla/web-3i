@@ -1,6 +1,6 @@
 {% extends "bootstrap/base.html" %}
 {% block metas %}
-    <meta http-equiv="refresh" content="5">
+    <meta http-equiv="refresh" content="15">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 {% endblock %}
 {% block title %}web-3i : Dashboard - SREE MURUGAN TILE WORKS{% endblock %}
@@ -13,32 +13,9 @@
 
 {% block content %}
           <div class="page-header container-fluid">
-               <div class="row">
-                   <div class="col-sm-2">
-                        [ Status ]
-                   </div>
-                   <div class="col-sm-9">
-                        <div class="panel panel-primary">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">Extruder Paddle 2</h3>
-                            </div>
-                            <div class="panel-body">
-                                <h1>{{rpm | int }} </h1> <br>
-                                {{ moment(ts_rpm).fromTime(now) }}
-                                <br/>
-                                <h1>{{amps | round(1, 'common') }}</h1>
-                                <br/>{{ moment(ts).fromTime(now) }}
-                                <br/>
-                                 <h1>{{ drivetemp | round(1, 'common')}} </h1><br/>
-                                  {{ moment(ts_drivetemp).fromTime(now) }}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-1">                    </div>
-               </div>
               <div class="row">
                    <div class="col-md-12">
-                        <div id="chart_paddle_div"></div>
+                        <div id="chart_div"></div>
                    </div>
                </div>
           </div>
@@ -66,18 +43,16 @@
         // Create the data table.
       var data = new google.visualization.DataTable();
       data.addColumn('datetime', 'Time');
-      data.addColumn('number', "Paddle 2 Current");
-      data.addColumn('number', "Paddle 2 Speed");
+      data.addColumn('number', "C2 Torque");
+
         // Set chart options
-        var options = {'title':'Paddle 2 Motor Running',
+        var options = {'title':'C2 Motor Running',
                         series: {
-                          0: {targetAxisIndex: 0},
-                          1: {targetAxisIndex: 1}
+                          0: {targetAxisIndex: 0}
                         },
                         vAxes: {
                           // Adds titles to each axis.
-                          0: {title: 'Amps'},
-                          1: {title: 'RPM'}
+                          0: {title: 'Amps'}
                         },
                         hAxis: {
 
@@ -91,12 +66,12 @@
 
               data.addRows([
                   {%  for ch in table %}
-                      [new Date("{{ ch.time_millis() }}"), {{ ch.value  }}, {{ ch.value }} ], // {{ ch.time }}
+                      [new Date("{{ ch.time_millis() }}"), {{ ch.value  }}],
                   {% endfor %}
       ]);
 
         // Instantiate and draw our chart, passing in some options.
-        var chart = new google.visualization.LineChart(document.getElementById('chart_paddle_div'));
+        var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
         chart.draw(data, options);
       }
     </script>
