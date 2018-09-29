@@ -42,6 +42,7 @@ class Channel_Data(db.Model):
     ts = db.Column(db.DateTime, nullable=False)
     value = db.Column(db.Numeric(25, 6))
     channel = db.relationship("Channels")
+    history_len = db.Column(db.Integer, nullable=False, default=1)
     def time_millis(self):
         tz = TZ_IN()
         dt = self.ts.replace(tzinfo=tz)
