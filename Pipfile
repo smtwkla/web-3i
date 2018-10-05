@@ -11,6 +11,7 @@ flask-moment = "*"
 flask-bootstrap = "*"
 numpy = "*"
 matplotlib = "*"
+flask-cors = "*"
 
 [dev-packages]
 
