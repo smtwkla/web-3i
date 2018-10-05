@@ -66,6 +66,7 @@ class Channels(db.Model):
     enabled = db.Column(db.Boolean, nullable=False)
     eng_unit = db.Column(db.String(15))
     history_len = db.Column(db.Integer, nullable=False, default=1)
+    long_name = db.Column(db.String(50))
 
 class Buses(db.Model):
     __tablename__ = 'buses'
@@ -99,7 +100,7 @@ def export_chl_history(chl_id):
     return ch
 
 def export_chl_list():
-    ch = Channels.query.all()
+    ch = Channels.query.order_by(Channels.name.asc()).all()
     return ch
 
 @app.route('/')
@@ -148,7 +149,7 @@ def channels():
 
     db_ch = export_chl_list()
     for dbc in db_ch:
-        chl = {"name": dbc.name, "id": dbc.id}
+        chl = {"name": dbc.name, "id": dbc.id, "long_name": dbc.long_name, "eng_unit": dbc.eng_unit}
         a.append(chl)
     return jsonify(a)
 # @app.route('/plot.png')
