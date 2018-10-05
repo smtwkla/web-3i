@@ -11,16 +11,11 @@ class ChartBuilder extends React.Component{
     constructor(props) {
         super(props);
         this.handleChannelChange = this.handleChannelChange.bind(this);
-        this.handleChannelNameChange = this.handleChannelNameChange.bind(this);
-        this.state = { channel_id: 1, channel_name: "Chl1"};
+        this.state = { channel: 0 };
     }
 
     handleChannelChange(chn) {
-        this.setState({channel_id: chn});
-    }
-
-    handleChannelNameChange(chn) {
-        this.setState({channel_name: chn});
+        this.setState({channel: chn});
     }
 
 
@@ -29,7 +24,7 @@ class ChartBuilder extends React.Component{
             <Grid className="chart-controls">
                 <Row className="show-grid">
                     <Col xs={4} md={4}>
-                        <ChannelChooser channel={this.state.channel} onChannelChange={this.handleChannelChange} onChannelNameChange={this.handleChannelNameChange}/>
+                        <ChannelChooser channel_id={this.state.channel.id} onChannelChange={this.handleChannelChange} />
                     </Col>
                     <Col xs={4} md={4}>
                         Start
@@ -58,7 +53,7 @@ class ChartBuilder extends React.Component{
             <Grid className="chart-box">
                 <Row className="show-grid">
                     <Col xs={12} md={12}>
-                        <DisplayGraph channel_id={this.state.channel_id}/>
+                        <DisplayGraph channel={this.state.channel}/>
                     </Col>
                 </Row>
             </Grid>
