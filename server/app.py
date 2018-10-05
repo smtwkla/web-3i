@@ -3,9 +3,12 @@ from flask import request
 from flask_sqlalchemy import SQLAlchemy
 from flask_bootstrap import Bootstrap
 from flask_moment import Moment
+from flask_cors import CORS
+from flask.json import jsonify
 import configparser
 import datetime
 import logging
+
 from sqlalchemy import Date as dbDate, cast
 
 #import io
@@ -28,6 +31,7 @@ except KeyError:
 db = SQLAlchemy(app)
 bs = Bootstrap(app)
 moment = Moment(app)
+cors_app = CORS(app)
 
 
 class TZ_IN(datetime.tzinfo):
@@ -61,6 +65,7 @@ class Channels(db.Model):
     format_code = db.Column(db.Integer, nullable=False)
     enabled = db.Column(db.Boolean, nullable=False)
     eng_unit = db.Column(db.String(15))
+    history_len = db.Column(db.Integer, nullable=False, default=1)
 
 class Buses(db.Model):
     __tablename__ = 'buses'
@@ -133,6 +138,17 @@ def chart():
     return render_template('chart.html', amps=amps, rpm=rpm, ts=ts, ts_rpm=ts_rpm, now=now, drivetemp=drivetemp,
                            ts_drivetemp=ts_drivetemp, table=table)
 
+@app.route('/channels')
+def channels():
+    a = []
+
+    chl = {"name":"Channel 1", "id": "1"}
+    chl2 = {"name": "Channel 2", "id": "2"}
+    chl3 = {"name": "Channel 3", "id": "3"}
+    a.append(chl)
+    a.append(chl2)
+    a.append(chl3)
+    return jsonify(a)
 # @app.route('/plot.png')
 # def plot():
 #     fig = Figure()
