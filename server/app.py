@@ -98,6 +98,9 @@ def export_chl_history(chl_id):
         order_by(Channel_Data.ts.desc()).limit(5000).all()
     return ch
 
+def export_chl_list():
+    ch = Channels.query.all()
+    return ch
 
 @app.route('/')
 def hello_world():
@@ -138,16 +141,15 @@ def chart():
     return render_template('chart.html', amps=amps, rpm=rpm, ts=ts, ts_rpm=ts_rpm, now=now, drivetemp=drivetemp,
                            ts_drivetemp=ts_drivetemp, table=table)
 
+
 @app.route('/channels')
 def channels():
     a = []
 
-    chl = {"name":"Channel 1", "id": "1"}
-    chl2 = {"name": "Channel 2", "id": "2"}
-    chl3 = {"name": "Channel 3", "id": "3"}
-    a.append(chl)
-    a.append(chl2)
-    a.append(chl3)
+    db_ch = export_chl_list()
+    for dbc in db_ch:
+        chl = {"name": dbc.name, "id": dbc.id}
+        a.append(chl)
     return jsonify(a)
 # @app.route('/plot.png')
 # def plot():

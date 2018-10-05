@@ -9,9 +9,9 @@ flask-sqlalchemy = "*"
 pymysql = "*"
 flask-moment = "*"
 flask-bootstrap = "*"
-numpy = "*"
-matplotlib = "*"
-flask-cors = "*"
+#numpy = "*"
+#matplotlib = "*"
+#flask-cors = "*"
 
 [dev-packages]
 
