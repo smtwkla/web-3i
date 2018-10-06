@@ -12,6 +12,7 @@ flask-bootstrap = "*"
 #numpy = "*"
 #matplotlib = "*"
 flask-cors = "*"
+simplejson = "*"
 
 [dev-packages]
 

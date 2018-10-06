@@ -8,7 +8,7 @@ from flask.json import jsonify
 import configparser
 import datetime
 import logging
-
+import simplejson
 from sqlalchemy import Date as dbDate, cast
 
 #import io
@@ -18,7 +18,7 @@ from sqlalchemy import Date as dbDate, cast
 app = Flask(__name__)
 
 config = configparser.ConfigParser()
-config.read('config.ini')
+config.read('server/config.ini')
 
 try:
     app.config['SQLALCHEMY_DATABASE_URI'] = config['db']['db_uri']
@@ -93,11 +93,19 @@ def export_all_channels():
 
     return cd
 
-def export_chl_history(chl_id):
+
+def export_chl_history(chl_id, from_time, to_time):
+    ch = Channel_Data.query.filter_by(channel_id=chl_id).filter(Channel_Data.ts > from_time).\
+        filter(Channel_Data.ts < to_time).order_by(Channel_Data.ts.desc()).limit(5000).all()
+    return ch
+
+
+def export_chl_history_today(chl_id):
     today = datetime.date.today() # datetime.date(2018, 9, 24)
     ch = Channel_Data.query.filter_by(channel_id=chl_id).filter(cast(Channel_Data.ts, dbDate) == today).\
         order_by(Channel_Data.ts.desc()).limit(5000).all()
     return ch
+
 
 def export_chl_list():
     ch = Channels.query.order_by(Channels.name.asc()).all()
@@ -116,7 +124,7 @@ def hello_world():
     ts_rpm = cd['Paddle2Speed'].ts
     ts_drivetemp = cd['Paddle2DriveTemp'].ts
 
-    table = export_chl_history(2)
+    table = export_chl_history_today(2)
 
     now = datetime.datetime.utcnow()
     return render_template('base.html', amps=amps, rpm=rpm, ts=ts, ts_rpm=ts_rpm, now=now, drivetemp=drivetemp,
@@ -151,10 +159,23 @@ def channels():
     for dbc in db_ch:
         chl = {"name": dbc.name, "id": dbc.id, "long_name": dbc.long_name, "eng_unit": dbc.eng_unit}
         a.append(chl)
-    return jsonify(a)
+    return simplejson.dumps(a)
+
 
 @app.route('/channel_data/<int:chl>')
 def channel_data(chl):
+    chartdata = []
+    res = export_chl_history_today(chl)
+    for i in res:
+        dt = i.ts.isoformat()
+        data = i.value
+        chartdata.append([dt, data])
+
+    return jsonify(chartdata)
+
+
+@app.route('/channel_data_rand/<int:chl>')
+def channel_data_rand(chl):
     from random import randint
 
     chartdata = []
@@ -162,7 +183,7 @@ def channel_data(chl):
         dt = (datetime.datetime.now() + datetime.timedelta(hours=i)).isoformat()
         data = (randint(0, 99))
         chartdata.append([dt, data])
-    return jsonify(chartdata)
+    return simplejson.dumps(chartdata)
 
 if __name__ == '__main__':
     app.run()
