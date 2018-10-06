@@ -53,7 +53,7 @@ class ChartBuilder extends React.Component{
             <Grid className="chart-box">
                 <Row className="show-grid">
                     <Col xs={12} md={12}>
-                        <DisplayGraph channel={this.state.channel}/>
+                        <DisplayGraph channel={this.state.channel} start={''} end={''} options={''} refresh={''} />
                     </Col>
                 </Row>
             </Grid>

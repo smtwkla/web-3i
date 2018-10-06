@@ -16,7 +16,7 @@ class ChannelChooser extends Component {
     componentDidMount(){
         axios.get('http://127.0.0.1:5000/channels')
             .then(res => {
-                console.log(res.data[0]);
+                //console.log(res.data[0]);
                 const channels = res.data;
                 this.setState({loaded: true});
                 this.setState({ channels });
