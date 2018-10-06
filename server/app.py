@@ -152,21 +152,17 @@ def channels():
         chl = {"name": dbc.name, "id": dbc.id, "long_name": dbc.long_name, "eng_unit": dbc.eng_unit}
         a.append(chl)
     return jsonify(a)
-# @app.route('/plot.png')
-# def plot():
-#     fig = Figure()
-#     axis = fig.add_subplot(1, 1, 1)
-#
-#     xs = range(100)
-#     ys = range(100)
-#
-#     axis.plot(xs, ys)
-#     canvas = FigureCanvas(fig)
-#     output = io.StringIO()
-#     canvas.print_png(output)
-#     response = make_response(output.getvalue())
-#     response.mimetype = 'image/png'
-#     return response
+
+@app.route('/channel_data/<int:chl>')
+def channel_data(chl):
+    from random import randint
+
+    chartdata = []
+    for i in range(0, 100):
+        dt = i
+        data = (randint(0, 99))
+        chartdata.append([dt, data])
+    return jsonify(chartdata)
 
 if __name__ == '__main__':
     app.run()
