@@ -18,7 +18,7 @@ from sqlalchemy import Date as dbDate, cast
 app = Flask(__name__)
 
 config = configparser.ConfigParser()
-config.read('server/config.ini')
+config.read('config.ini')
 
 try:
     app.config['SQLALCHEMY_DATABASE_URI'] = config['db']['db_uri']
@@ -159,7 +159,7 @@ def channel_data(chl):
 
     chartdata = []
     for i in range(0, 100):
-        dt = i
+        dt = (datetime.datetime.now() + datetime.timedelta(hours=i)).isoformat()
         data = (randint(0, 99))
         chartdata.append([dt, data])
     return jsonify(chartdata)
