@@ -23,7 +23,15 @@ class ChannelChooser extends Component {
             });
     }
     handleChange(e){
-        const channel = this.state.channels[e.target.value]; // lookup channel from local state
+
+        let channel = null;
+        for (var i = 0; i < this.state.channels.length; i++) {
+            // eslint-disable-next-line
+            if (this.state.channels[i].id == e.target.value) {
+                channel = this.state.channels[i];
+            }
+        }
+        //const channel = this.state.channels.find(function(obj) { return obj.id === [e.target.value];} ); // lookup channel from local state
         //const channel = { id: e.target.value, name: e.target.options[e.target.selectedIndex].text, eng_unit: e.target };
         this.props.onChannelChange(channel);
     }
@@ -34,7 +42,7 @@ class ChannelChooser extends Component {
         return <div>
             <select value={channel_id} onChange={this.handleChange}>
                 {
-                    obj.map(function(object, i) { return <option key={i} value={i}>{object.name}</option>;})
+                    obj.map(function(object, i) { return <option key={i} value={object.id}>{object.name}</option>;})
                 }
             </select>
         </div>

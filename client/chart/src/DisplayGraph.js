@@ -13,10 +13,10 @@ class DisplayGraph extends React.Component{
 
     componentDidMount(){
 
-        if(this.state.status==='loaded' || this.state.status==='booting' ) {
+        /*if(this.state.status==='loaded' || this.state.status==='booting' ) {
             this.setState({status: 'loading'});
 
-            const chartData = [['Timestamp', "this.props.channel.name"]]
+            const chartData = [['Timestamp', this.props.channel.name]]
 
             axios.get('http://127.0.0.1:5000/channel_data/1')
                 .then(res => {
@@ -25,8 +25,30 @@ class DisplayGraph extends React.Component{
                     this.setState({status: 'loaded'});
                     this.setState({data});
                 });
-        }
+        }*/
+    }
 
+    componentDidUpdate(prevProps){
+        if (this.props.channel.id === prevProps.channel.id){}
+        else {
+            //fetch data
+            const chartData = [['Timestamp', this.props.channel.name]]
+
+            axios.get('http://127.0.0.1:5000/channel_data/1')
+                .then(res => {
+                    console.log(res.data);
+                    let record = [];
+                    for(let i = 0; i<res.data.length; i++){
+                        record.push(
+                            [ new Date(res.data[i][0]) , res.data[i][1] ]
+                        );
+                    }
+                    const data = chartData.concat(record);
+                    this.setState({status: 'loaded'});
+                    this.setState({data});
+                });
+
+        }
 
     }
 
