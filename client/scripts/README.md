@@ -7,3 +7,5 @@ $ npm install --save react react-dom
 $ npm install --save react-bootstrap
 $ npm install --save react-google-charts
 axios
+moment
+react-datetime
