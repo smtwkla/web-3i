@@ -27,7 +27,8 @@ class ChartBuilder extends React.Component{
             StartTime: '',
             EndTime: '',
             prevStartTime: '',
-            prevEndTime: ''
+            prevEndTime: '',
+            generateClickedCount: 0
 
         };
 
@@ -79,7 +80,8 @@ class ChartBuilder extends React.Component{
                 channel: this.state.formchannel,
                 StartTime: this.state.formStartTime,
                 EndTime: this.state.formEndTime,
-                RefInt: this.state.formRefInt
+                RefInt: this.state.formRefInt,
+                generateClickedCount: this.state.generateClickedCount + 1
             }
         );
     }
@@ -92,7 +94,7 @@ class ChartBuilder extends React.Component{
                         <Form inline>
                             <div align="left"><h4>Channel:</h4>{' '}
                                 <ChannelChooser channel_id={this.state.channel.id} onChannelChange={this.handleChannelChange} />
-                                <h5>{this.state.channel.long_name}</h5>
+                                <h5>{this.state.formchannel.long_name}</h5>
                             </div>
                         </Form>
                     </Col>
@@ -112,7 +114,7 @@ class ChartBuilder extends React.Component{
 
                     </Col>
                     <Col xs={2} md={2}>
-                        <ChartRefreshOpt refresh_int={this.state.RefInt} handleRefIntChange={this.handleRefIntChange}/>
+                        <ChartRefreshOpt refresh_int={this.state.formRefInt} handleRefIntChange={this.handleRefIntChange}/>
                     </Col>
 
                 </Row>
@@ -125,7 +127,7 @@ class ChartBuilder extends React.Component{
             <Grid className="chart-box">
                 <Row className="show-grid">
                     <Col xs={12} md={12}>
-                        <DisplayGraph channel={this.state.channel} start={this.state.StartTime} end={this.state.EndTime} options={''} refresh={''} />
+                        <DisplayGraph channel={this.state.channel} start={this.state.StartTime} end={this.state.EndTime} options={''} refresh={''} clickcount={this.state.generateClickedCount}/>
                     </Col>
                 </Row>
             </Grid>

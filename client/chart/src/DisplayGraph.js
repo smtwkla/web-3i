@@ -30,7 +30,8 @@ class DisplayGraph extends React.Component{
     }
 
     props_changed(prevProps){
-        if (this.props.channel.id === prevProps.channel.id && this.props.start === prevProps.start && this.props.end === prevProps.end)
+        if (this.props.channel.id === prevProps.channel.id && this.props.start === prevProps.start &&
+            this.props.end === prevProps.end && this.props.clickcount === prevProps.clickcount)
             return false;
         else return true;
     }
@@ -93,7 +94,7 @@ class DisplayGraph extends React.Component{
         if (this.state.status === 'loaded') {
 
             return (
-                <div>Graph here! {this.props.channel.long_name}
+                <div>Graph here! {this.props.channel.long_name} {this.props.clickcount}
                     <Chart           chartType="LineChart"
                                      data={this.state.data}
                                      width="100%"
@@ -110,7 +111,7 @@ class DisplayGraph extends React.Component{
         }
         else{
             return (
-                <div><h3>Loading data...</h3>{this.props.start} to {this.props.end}</div>
+                <div><h3>Loading data...</h3></div>
             )
         }
     }

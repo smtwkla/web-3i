@@ -1,9 +1,10 @@
 import * as React from "react";
 import Form from "react-bootstrap/lib/Form";
 import FormControl from "react-bootstrap/lib/FormControl";
+import FormGroup from "react-bootstrap/lib/FormGroup";
 import ControlLabel from "react-bootstrap/lib/ControlLabel";
 import Checkbox from "react-bootstrap/lib/Checkbox";
-
+import './Refresh.css'
 class ChartRefreshOpt  extends React.Component {
 
     constructor(props) {
@@ -34,19 +35,21 @@ class ChartRefreshOpt  extends React.Component {
 
     render() {
 
-        let time_input_box = <div> <ControlLabel htmlFor="ref_secs">In </ControlLabel>
-                                    <FormControl id="ref_secs" type={"text"} width={1} value={ this.props.refresh_int } onChange={this.handle_intChange} />
-                                    <ControlLabel htmlFor="ref_secs">Secs.</ControlLabel>
+        let time_input_box = <div> <FormControl inline id="ref_secs" type={"text"} bsStyle={"small-width"} value={ this.props.refresh_int } onChange={this.handle_intChange} />
+            <ControlLabel htmlFor="ref_secs">Secs.</ControlLabel>
                             </div>;
 
         return (
-            <Form inline>
-                <div align="left"><h4>Graph Refresh:</h4></div>
-                <div align="left">
-                    <Checkbox checked={this.state.auto_on } onChange ={this.handleClick}>Automatic</Checkbox>
-                    { this.state.auto_on ? time_input_box  : null  }
-                </div>
-            </Form>
+            <div>
+                <Form inline>
+                    <div align="left"><h4>Graph Refresh:</h4></div>
+                    <div align="left"><FormGroup>
+                        <Checkbox inline checked={this.state.auto_on } onChange ={this.handleClick}>Automatic</Checkbox>
+                        { this.state.auto_on ? time_input_box  : null  }
+                    </FormGroup>
+                    </div>
+                </Form>
+            </div>
         )
     }
 
