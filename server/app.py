@@ -1,4 +1,4 @@
-from flask import Flask, render_template, make_response
+from flask import Flask, render_template, make_response, request
 from flask import request
 from flask_sqlalchemy import SQLAlchemy
 from flask_bootstrap import Bootstrap
@@ -165,7 +165,11 @@ def channels():
 @app.route('/channel_data/<int:chl>')
 def channel_data(chl):
     chartdata = []
-    res = export_chl_history_today(chl)
+    from_ts = datetime.datetime.strptime(request.args.get('from_ts'), "%Y-%m-%dT%H:%M:%S")
+    to_ts = datetime.datetime.strptime(request.args.get('to_ts'), "%Y-%m-%dT%H:%M:%S")
+    #print(from_ts)
+    #print(to_ts)
+    res = export_chl_history(chl, from_ts, to_ts)
     for i in res:
         dt = i.ts.isoformat()
         data = i.value
