@@ -97,14 +97,25 @@ class DisplayGraph extends React.Component{
         // Render Graph
 
         if (this.state.status === 'loaded') {
-
+            let timing  = this.props.start + " to " + this.props.end;
             return (
-                <div>Graph here! {this.props.channel.long_name} {this.props.clickcount}
+                <div>
                     <Chart           chartType="LineChart"
                                      data={this.state.data}
                                      width="100%"
-                                     height="400px"
-                    />
+                                     height="500px"
+                                     options={{
+                                             hAxis: {
+                                                 title: 'Time',
+                                             },
+                                             vAxis: {
+                                                 title: this.props.channel.eng_unit,
+                                             },
+                                         title: this.props.channel.long_name,
+                                         legend: { position: 'bottom' },
+                                         explorer: {},
+                                     }}
+                    /> {timing}
                 </div>
             )
         }
