@@ -39,6 +39,12 @@ class ChartBuilder extends React.Component{
         this.handleStartOptClick =this.handleStartOptClick.bind(this);
         this.handleEndOptClick =this.handleEndOptClick.bind(this);
         this.loadGraph = this.loadGraph.bind(this);
+        this.forceRef = this.forceRef.bind(this);
+        this.unmountTimer = this.unmountTimer.bind(this);
+    }
+
+    componentWillUnmount(){
+        this.unmountTimer();
     }
 
     handleChannelChange(chn) {
@@ -71,16 +77,32 @@ class ChartBuilder extends React.Component{
     }
 
     handleRefIntChange(val) {
-        this.setState({formRefInt: val});
+        this.setState({RefInt: val});
+        this.unmountTimer();
+        if(val>10){
+            console.log("Setting timer..." + val);
+            this.forceUpdateInterval = setInterval(() => this.forceRef(), val*1000);
+        }
     }
 
+    forceRef() {
+        console.log("Timer tick...");
+        this.setState({generateClickedCount: this.state.generateClickedCount+1});
+    }
+
+    unmountTimer(){
+        if (typeof this.forceUpdateInterval !== 'undefined'){
+            console.log("Clearing timer...");
+            clearInterval(this.forceUpdateInterval)
+        }
+
+    }
     loadGraph(){
         this.setState(
             {
                 channel: this.state.formchannel,
                 StartTime: this.state.formStartTime,
                 EndTime: this.state.formEndTime,
-                RefInt: this.state.formRefInt,
                 generateClickedCount: this.state.generateClickedCount + 1
             }
         );
@@ -114,25 +136,33 @@ class ChartBuilder extends React.Component{
 
                     </Col>
                     <Col xs={2} md={2}>
-                        <ChartRefreshOpt refresh_int={this.state.formRefInt} handleRefIntChange={this.handleRefIntChange}/>
+
                     </Col>
 
                 </Row>
                 <Row className="show-grid">
-                    <Col xs={12} md={12}>
-                        <Button  bsStyle="primary" onClick={this.loadGraph}>Generate Graph</Button>
+                    <Col xs={4} md={4}>
+                        {' '}
+                    </Col>
+                    <Col xs={4} md={4}>
+                        <br/><br/><Button  bsStyle="primary" onClick={this.loadGraph}>Generate Graph</Button>
+                    </Col>
+                    <Col xs={4} md={4}>
+                        <ChartRefreshOpt refresh_int={this.state.RefInt} handleRefIntChange={this.handleRefIntChange}/>
                     </Col>
                 </Row>
             </Grid>
             <Grid className="chart-box">
                 <Row className="show-grid">
                     <Col xs={12} md={12}>
-                        <DisplayGraph channel={this.state.channel} start={this.state.StartTime} end={this.state.EndTime} options={''} refresh={''} clickcount={this.state.generateClickedCount}/>
+                        <br/><DisplayGraph channel={this.state.channel} start={this.state.StartTime} end={this.state.EndTime} options={''} refresh={''} clickcount={this.state.generateClickedCount}/>
                     </Col>
                 </Row>
             </Grid>
         </div>
     }
+
+
 }
 
 export default ChartBuilder

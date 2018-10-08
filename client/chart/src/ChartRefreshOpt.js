@@ -33,20 +33,27 @@ class ChartRefreshOpt  extends React.Component {
         this.props.handleRefIntChange(val);
     }
 
+    getValidationState(){
+        const ref_int = this.props.refresh_int;
+        if (ref_int >= 10) return 'success';
+        else if (ref_int>0) return 'error';
+        return null;
+    }
+
     render() {
 
-        let time_input_box = <div> <FormControl inline id="ref_secs" type={"text"} bsStyle={"small-width"} value={ this.props.refresh_int } onChange={this.handle_intChange} />
-            <ControlLabel htmlFor="ref_secs">Secs.</ControlLabel>
-                            </div>;
+        let time_input_box = <span> <FormControl id="ref_secs" type={"text"} bsStyle={"small-width"} value={ this.props.refresh_int } onChange={this.handle_intChange} />
+            <ControlLabel htmlFor="ref_secs">Secs.</ControlLabel> </span>;
+
 
         return (
             <div>
                 <Form inline>
-                    <div align="left"><h4>Graph Refresh:</h4></div>
-                    <div align="left"><FormGroup>
-                        <Checkbox inline checked={this.state.auto_on } onChange ={this.handleClick}>Automatic</Checkbox>
-                        { this.state.auto_on ? time_input_box  : null  }
-                    </FormGroup>
+                    <div align="left"><h4>Graph Refresh:</h4>
+                        <FormGroup  validationState = {this.getValidationState()}>
+                            <Checkbox inline checked={this.state.auto_on } onChange ={this.handleClick}>Automatic</Checkbox>
+                            { this.state.auto_on ? time_input_box  : null  }
+                        </FormGroup>
                     </div>
                 </Form>
             </div>

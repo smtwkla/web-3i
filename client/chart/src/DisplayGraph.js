@@ -43,6 +43,11 @@ class DisplayGraph extends React.Component{
 
     componentDidUpdate(prevProps){
         if (this.props_changed(prevProps)) {
+
+            if (typeof this.props.channel.id === 'undefined'){
+                return null;
+            }
+
             //fetch data
             const chartData = [['Timestamp', this.props.channel.name]]
 
@@ -111,7 +116,7 @@ class DisplayGraph extends React.Component{
         }
         else{
             return (
-                <div><h3>Loading data...</h3></div>
+                <div><h3>Please choose ...</h3></div>
             )
         }
     }
